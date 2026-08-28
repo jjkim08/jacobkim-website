@@ -1,0 +1,95 @@
+/* ============================================================
+   Jacob Kim — motion
+   Persona 5 energy, monochrome execution:
+   hard diagonal wipes, skewed line reveals, snap easing.
+
+   Scroll reveals use CSS scroll-driven animations
+   (animation-timeline: view()). They are position-driven, not
+   time-driven, so they can't get "stuck" the way a transition
+   can, and the whole thing is gated behind @supports so browsers
+   without it (Firefox / Safari today) just show the content.
+   ============================================================ */
+
+/* ---------- cross-document page transitions ---------- */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root) {
+  animation: page-out 340ms cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+::view-transition-new(root) {
+  animation: page-in 540ms cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+@keyframes page-out {
+  to { transform: translate3d(-9vw, 0, 0) skewX(-3deg); opacity: 0; filter: contrast(1.5); }
+}
+@keyframes page-in {
+  from { clip-path: polygon(0 0, 0 0, -50% 100%, -50% 100%); }
+  to   { clip-path: polygon(0 0, 150% 0, 100% 100%, 0 100%); }
+}
+
+/* the sticky header rides along without the diagonal wipe */
+::view-transition-group(site) { animation-duration: 340ms; }
+::view-transition-old(site), ::view-transition-new(site) {
+  animation: header-fade 240ms ease both;
+}
+@keyframes header-fade { from { opacity: 0.35; } to { opacity: 1; } }
+
+/* named heroes morph between the projects list and each project page */
+.vt-drone { view-transition-name: hero-drone; }
+.vt-game  { view-transition-name: hero-game; }
+.vt-vex   { view-transition-name: hero-vex; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(site),
+  ::view-transition-new(site) { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- headline: masked lines slide up on load ---------- */
+/* .lines / .ln / span are built by site.js; no JS => plain heading */
+@media (prefers-reduced-motion: no-preference) {
+  .lines { display: block; }
+  .lines .ln { display: block; overflow: clip; padding-block: 0.04em; }
+  .lines .ln > span {
+    display: block;
+    animation: line-rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation-delay: calc(0.05s + var(--i, 0) * 80ms);
+  }
+  @keyframes line-rise { from { transform: translateY(115%) skewY(6deg); } }
+}
+
+/* ---------- scroll reveals ---------- */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html.js [data-reveal] {
+      animation: reveal-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 4% entry 38%;
+    }
+    @keyframes reveal-rise {
+      from { opacity: 0; transform: translateY(26px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    html.js [data-reveal="fade"] { animation-name: reveal-fade; }
+    @keyframes reveal-fade { from { opacity: 0; } to { opacity: 1; } }
+
+    html.js [data-reveal="wipe"] {
+      animation-name: reveal-wipe;
+      animation-range: entry 2% entry 34%;
+    }
+    @keyframes reveal-wipe {
+      from { opacity: 0; clip-path: inset(0 100% 0 0); }
+      to   { opacity: 1; clip-path: inset(0 0 0 0); }
+    }
+
+    /* staggered groups: nudge each child's range a little later */
+    html.js [data-stagger] > * { animation-range: entry calc(4% + var(--i, 0) * 4%) entry calc(40% + var(--i, 0) * 4%); }
+  }
+}
+
+/* ---------- small interactions ---------- */
+.hoverskew { transition: transform 0.25s cubic-bezier(0.5, 0, 0, 1); }
+.hoverskew:hover { transform: skewX(-4deg) translateX(4px); }

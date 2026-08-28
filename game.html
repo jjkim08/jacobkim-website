@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.classList.add("js")</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111110'/%3E%3Cg fill='none' stroke='%23f5f3ec' stroke-width='2.4'%3E%3Ccircle cx='16' cy='16' r='7'/%3E%3Cpath d='M16 3v8M16 21v8M3 16h8M21 16h8'/%3E%3C/g%3E%3C/svg%3E" />
+  <title>Bunblade &mdash; Jacob Kim</title>
+  <meta name="description" content="Bunblade — a turn-based combat game built in Unity with a parry system, event-driven architecture, and a custom binary-heap turn scheduler." />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/motion.css" />
+  <script src="js/site.js" defer></script>
+</head>
+<body>
+
+  <header class="site">
+    <nav class="nav">
+      <a href="index.html">about me</a>
+      <a href="projects.html">projects</a>
+      <a href="fun.html">fun</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">Project 02 &middot; Unity &middot; C#</p>
+      <h1 class="t-hero vt-game" data-lines data-reveal-now>Bunblade</h1>
+      <p class="lede" data-reveal="rise" style="margin-top: 1.5rem;">
+        A turn-based combat game with a twist: a real-time parry sits inside the turn
+        system. Time the input window and you cancel the hit.
+      </p>
+    </section>
+
+    <!-- ============ play area ============ -->
+    <section class="wrap" style="padding-top: 0;">
+      <div id="game-embed" class="frame frame--wide" data-reveal="wipe">
+        <div>
+          <p><b>Playable build not added yet.</b></p>
+          <p class="mono ash" style="margin-top: 0.8rem;">
+            Needs a Unity <b>WebGL</b> build dropped in <b>assets/game/</b>.<br />
+            Build steps are in <b>BUILD-NOTES.md</b> &mdash; then this box becomes the game.
+          </p>
+        </div>
+      </div>
+      <p class="mono ash" data-reveal="fade" style="margin-top: 1rem;">
+        Built in Unity 6.2 &middot; source: <a class="tlink" href="https://github.com/jjkim08">github.com/jjkim08</a>
+        <span class="draft">link the exact repo</span>
+      </p>
+    </section>
+
+    <hr class="divider" />
+
+    <section class="wrap">
+      <div class="pair">
+        <div class="flow" data-reveal="rise">
+          <h2 class="t-lg">The hook</h2>
+          <p>
+            Turn-based combat usually means you pick a move and watch it resolve. Bunblade
+            keeps the turn structure but drops a timed input window into the enemy&rsquo;s
+            attack &mdash; a state machine confirms whether you hit the parry, and the turn
+            branches from there.
+          </p>
+          <ul class="changelog">
+            <li>Parry system &mdash; timed windows + confirmation states</li>
+            <li>Shop &amp; economy with JSON save / load</li>
+            <li>Pattern-based enemy AI</li>
+            <li>Spells &mdash; Ignia (fire), Glacia (ice)</li>
+          </ul>
+        </div>
+
+        <div class="flow" data-reveal="rise">
+          <h2 class="t-lg">Under the hood</h2>
+          <table class="spec">
+            <tr><th>Architecture</th><td>Event-driven; systems communicate through events, not direct calls</td></tr>
+            <tr><th>Turn order</th><td>Custom binary heap scheduling combatants by speed / initiative</td></tr>
+            <tr><th>Combat data</th><td>ScriptableObjects for players, enemies, spells, elements</td></tr>
+            <tr><th>Persistence</th><td>Shop / economy state serialized to JSON</td></tr>
+            <tr><th>Enemies</th><td>Ghoul, Spirit &mdash; each with its own action pattern</td></tr>
+          </table>
+          <pre class="code"><span class="c">// heap.cs — turn scheduler</span>
+public void Insert(Combatant c, int tick) { ... }
+public Combatant PopNext() {
+    <span class="c">// lowest tick acts first; O(log n)</span>
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">Screens</p>
+      <div class="pair" data-stagger style="margin-top: 1.5rem;">
+        <div class="frame" data-reveal>main menu &mdash; assets/game/shots/menu.png <span class="draft">optional</span></div>
+        <div class="frame" data-reveal>battle &mdash; assets/game/shots/battle.png <span class="draft">optional</span></div>
+      </div>
+    </section>
+
+    <section class="wrap" style="padding-top: 0;">
+      <a class="btn" href="projects.html">&larr; all projects</a>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="titleblock">
+      <div class="tb tb--name">
+        <span class="tb__k">Name</span>
+        <span class="tb__v">Jacob Kim</span>
+        <span class="tb__sub">Calgary &middot; Waterloo</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Discipline</span>
+        <span class="tb__v">Mechatronics Eng.</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Institution</span>
+        <span class="tb__v">University of Waterloo</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Contact</span>
+        <span class="tb__v">
+          <a class="tlink" href="mailto:j925@uwaterloo.ca">email</a> &middot;
+          <a class="tlink" href="https://github.com/jjkim08">github</a> &middot;
+          <a class="tlink" href="https://linkedin.com/in/jacob-kim08">linkedin</a>
+        </span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Rev</span>
+        <span class="tb__v">2026.08</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Sheet</span>
+        <span class="tb__v">bunblade &mdash; 04 / 06</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.classList.add("js")</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111110'/%3E%3Cg fill='none' stroke='%23f5f3ec' stroke-width='2.4'%3E%3Ccircle cx='16' cy='16' r='7'/%3E%3Cpath d='M16 3v8M16 21v8M3 16h8M21 16h8'/%3E%3C/g%3E%3C/svg%3E" />
+  <title>Custom Quadcopter &mdash; Jacob Kim</title>
+  <meta name="description" content="A fully custom quadcopter: five frame iterations in Fusion 360, hand-soldered electronics, and autonomous visual tracking on a Raspberry Pi." />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/motion.css" />
+  <script src="js/site.js" defer></script>
+</head>
+<body>
+
+  <header class="site">
+    <nav class="nav">
+      <a href="index.html">about me</a>
+      <a href="projects.html">projects</a>
+      <a href="fun.html">fun</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============ hero ============ -->
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">Project 01 &middot; 2025</p>
+      <h1 class="t-hero vt-drone" data-lines data-reveal-now>Custom
+Quadcopter</h1>
+      <p class="lede" data-reveal="rise" style="margin-top: 1.5rem;">
+        A quadcopter designed from nothing &mdash; frame, wiring, and flight software.
+        Five CAD iterations to get from &ldquo;it flies&rdquo; to &ldquo;it holds a stable hover
+        and tracks a target on its own.&rdquo;
+      </p>
+
+      <div class="stats" data-stagger style="margin-top: clamp(2rem, 5vw, 3.5rem);">
+        <div class="stat"><b>5</b><span>frame iterations</span></div>
+        <div class="stat"><b>100%</b><span>custom CAD frame</span></div>
+        <div class="stat"><b>Pi + cam</b><span>onboard compute</span></div>
+        <div class="stat"><b>ELRS</b><span>radio link</span></div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="pair">
+        <div class="flow" data-reveal="rise">
+          <h2 class="t-lg">The brief</h2>
+          <p>
+            Design and CAD-model a fully custom quadcopter frame, reinforce it to survive
+            crashes, integrate a flight-controller / ESC stack, brushless motors, and an
+            ELRS radio system, and hand-solder every power and signal connection.
+          </p>
+          <p>
+            Then diagnose the flight-stability problems that showed up &mdash; frame flex,
+            weight balance, oscillation &mdash; and fix them through redesign until the
+            airframe hovers cleanly with a Raspberry Pi, camera, and GPS aboard.
+          </p>
+        </div>
+        <div class="flow" data-reveal="rise">
+          <h2 class="t-lg">Stack</h2>
+          <table class="spec">
+            <tr><th>Design</th><td>Fusion 360, 3D-printed frame</td></tr>
+            <tr><th>Flight controller</th><td><span class="draft">FC / ESC &mdash; confirm model</span></td></tr>
+            <tr><th>Motors</th><td><span class="draft">brushless &mdash; size / kv?</span></td></tr>
+            <tr><th>Radio</th><td>ExpressLRS (ELRS)</td></tr>
+            <tr><th>Companion</th><td>Raspberry Pi + USB camera + GPS</td></tr>
+            <tr><th>Autopilot</th><td>ArduPilot (MAVLink / GUIDED)</td></tr>
+            <tr><th>Vision</th><td>Python, OpenCV</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ============ iteration timeline ============ -->
+    <section>
+      <div class="wrap">
+        <p class="kicker" data-reveal="fade">The iterations</p>
+        <h2 class="t-xl" data-lines>v1 &rarr; v5</h2>
+      </div>
+
+      <div class="wrap layout-rail" style="margin-top: clamp(2rem, 5vw, 4rem);">
+        <nav class="rail" data-rail aria-label="Drone versions">
+          <a href="#v1">V1</a>
+          <a href="#v2">V2</a>
+          <a href="#v3">V3</a>
+          <a href="#v4">V4</a>
+          <a href="#v5">V5</a>
+          <a href="#software">SW</a>
+        </nav>
+
+        <div>
+          <article class="version" id="v1" data-version data-reveal="rise">
+            <div class="version__head">
+              <span class="bignum">01</span>
+              <div><p class="kicker">Iteration 1</p><h3 class="t-lg">Baseline airframe</h3></div>
+            </div>
+            <div class="pair">
+              <div class="frame" data-model="assets/drones/v1/model.glb">
+                V1 &mdash; interactive model / photos<br />drop files in <b>assets/drones/v1/</b>
+              </div>
+              <div class="flow">
+                <p>First printable frame: top plate, bottom plate, and four arms. Proof that the
+                  geometry, motor mounts, and stack layout work together.</p>
+                <ul class="changelog">
+                  <li>Three-part printed frame &mdash; top, bottom, arms</li>
+                  <li><span class="draft">draft &mdash; tell me what v1 got right / wrong</span></li>
+                </ul>
+                <table class="spec">
+                  <tr><th>Frame size</th><td><span class="draft">? mm motor-to-motor</span></td></tr>
+                  <tr><th>All-up weight</th><td><span class="draft">? g</span></td></tr>
+                  <tr><th>Outcome</th><td><span class="draft">flew? flex issues?</span></td></tr>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <article class="version" id="v2" data-version data-reveal="rise">
+            <div class="version__head">
+              <span class="bignum">02</span>
+              <div><p class="kicker">Iteration 2</p><h3 class="t-lg">Refined geometry</h3></div>
+            </div>
+            <div class="pair">
+              <div class="frame" data-model="assets/drones/v2/model.glb">
+                V2 &mdash; interactive model / photos<br />drop files in <b>assets/drones/v2/</b>
+              </div>
+              <div class="flow">
+                <p>Second pass on the same three parts &mdash; tighter tolerances and a cleaner
+                  layout for the flight-controller stack and wiring.</p>
+                <ul class="changelog">
+                  <li>Reworked top / bottom / arm parts</li>
+                  <li><span class="draft">draft &mdash; what changed and why</span></li>
+                </ul>
+                <table class="spec">
+                  <tr><th>Change vs v1</th><td><span class="draft">?</span></td></tr>
+                  <tr><th>Outcome</th><td><span class="draft">?</span></td></tr>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <article class="version" id="v3" data-version data-reveal="rise">
+            <div class="version__head">
+              <span class="bignum">03</span>
+              <div><p class="kicker">Iteration 3</p><h3 class="t-lg">Stiffening the frame</h3></div>
+            </div>
+            <div class="pair">
+              <div class="frame" data-model="assets/drones/v3/model.glb">
+                V3 &mdash; interactive model / photos<br />drop files in <b>assets/drones/v3/</b>
+              </div>
+              <div class="flow">
+                <p>Added dedicated arm supports and a top cap. This is the iteration where the
+                  frame stopped flexing under motor load &mdash; gussets and bracing to kill the
+                  oscillation.</p>
+                <ul class="changelog">
+                  <li>New part: arm support (gusset / brace)</li>
+                  <li>New part: cap</li>
+                  <li><span class="draft">draft &mdash; did this fix the oscillation? by how much?</span></li>
+                </ul>
+                <table class="spec">
+                  <tr><th>Added</th><td>Arm support, cap</td></tr>
+                  <tr><th>Problem targeted</th><td>Frame rigidity / oscillation</td></tr>
+                  <tr><th>Outcome</th><td><span class="draft">?</span></td></tr>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <article class="version" id="v4" data-version data-reveal="rise">
+            <div class="version__head">
+              <span class="bignum">04</span>
+              <div><p class="kicker">Iteration 4</p><h3 class="t-lg">Modular joints + payload</h3></div>
+            </div>
+            <div class="pair">
+              <div class="frame" data-model="assets/drones/v4/model.glb">
+                V4 &mdash; interactive model / photos<br />drop files in <b>assets/drones/v4/</b>
+              </div>
+              <div class="flow">
+                <p>Introduced push-pin joints for tool-free assembly and an arm claw for
+                  clamping. A pin-less variant was prototyped and dropped.</p>
+                <ul class="changelog">
+                  <li>New: male / female push-pin joints</li>
+                  <li>New: arm claw</li>
+                  <li>New: alternate cap</li>
+                  <li>Abandoned: pin-less arm concept</li>
+                  <li><span class="draft">draft &mdash; why push-pins? what was the claw for?</span></li>
+                </ul>
+                <table class="spec">
+                  <tr><th>Added</th><td>Push-pin joints, arm claw, alt cap</td></tr>
+                  <tr><th>Outcome</th><td><span class="draft">?</span></td></tr>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <article class="version" id="v5" data-version data-reveal="rise">
+            <div class="version__head">
+              <span class="bignum">05</span>
+              <div><p class="kicker">Iteration 5 &middot; current</p><h3 class="t-lg">Sensors + autonomy-ready</h3></div>
+            </div>
+            <div class="pair">
+              <div class="frame" data-model="assets/drones/v5/model.glb">
+                V5 &mdash; interactive model / photos<br />drop files in <b>assets/drones/v5/</b>
+              </div>
+              <div class="flow">
+                <p>The flying configuration: a dedicated GPS mount, refined arms and claw, and
+                  the 150&nbsp;mm printed sphere the drone tracks in the air.</p>
+                <ul class="changelog">
+                  <li>New: GPS module mount</li>
+                  <li>Refined: arm, arm support, claw</li>
+                  <li>New: printed tracking target (150&nbsp;mm sphere)</li>
+                  <li><span class="draft">draft &mdash; final weight, flight time, what you'd do next</span></li>
+                </ul>
+                <table class="spec">
+                  <tr><th>Added</th><td>GPS mount, tracking sphere</td></tr>
+                  <tr><th>All-up weight</th><td><span class="draft">? g</span></td></tr>
+                  <tr><th>Hover</th><td><span class="draft">stable / notes</span></td></tr>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <!-- ============ flight software ============ -->
+          <article class="version" id="software" data-version data-reveal="rise">
+            <div class="version__head">
+              <span class="bignum">SW</span>
+              <div><p class="kicker">Flight software</p><h3 class="t-lg">Autonomous visual tracking</h3></div>
+            </div>
+
+            <div class="flow">
+              <p>
+                On top of ArduPilot, a Python stack running on the Raspberry Pi detects a
+                blue printed sphere with OpenCV, estimates its distance from apparent size,
+                and streams velocity + yaw-rate commands to the flight controller over
+                MAVLink to yaw toward the ball and hold a set distance.
+              </p>
+
+              <div class="pair">
+                <table class="spec">
+                  <tr><th>Detector</th><td>HSV threshold + roundness / saturation gates, 960&nbsp;px, ~150&nbsp;mm ball</td></tr>
+                  <tr><th>Distance</th><td>Pinhole model, calibrated focal length in pixels</td></tr>
+                  <tr><th>Yaw control</th><td>Proportional on image offset, deadband, rate-limited</td></tr>
+                  <tr><th>Forward control</th><td>Proportional on distance error, smoothed, clamped</td></tr>
+                  <tr><th>Link</th><td>pymavlink, <code>SET_POSITION_TARGET</code> in body frame at 10&nbsp;Hz</td></tr>
+                  <tr><th>Safety</th><td><code>--dry-run</code> / <code>--no-fc</code> modes, lost-target timeout, manual-override switch</td></tr>
+                </table>
+
+                <div class="flow">
+                  <pre class="code"><span class="c"># follow.py — the control step</span>
+if usable:
+    yaw_rate = yaw_ctl.update(result["offset_x"])
+    vx, _   = fwd_ctl.update(result["distance_m"])
+    state = "TRACK"
+else:
+    <span class="c"># keep sending zeros — going silent for 3 s</span>
+    <span class="c"># drops the FC out of velocity control</span>
+    yaw_rate, vx = 0.0, 0.0
+    state = "SEARCH"
+
+fc.send_command(vx, yaw_rate)</pre>
+                  <p class="mono ash">Full source: <a class="tlink" href="https://github.com/jjkim08">github.com/jjkim08</a> <span class="draft">link the exact repo</span></p>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ============ flight video ============ -->
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">In the air</p>
+      <h2 class="t-xl" data-lines>Flight log</h2>
+      <div class="frame frame--wide" data-reveal="wipe" style="margin-top: 2rem;">
+        flight video goes here &mdash; drop a muted loop at <b>assets/drones/flight.mp4</b><br />
+        (send me the clips and I&rsquo;ll cut them into a cinematic band with click-to-expand)
+      </div>
+    </section>
+
+    <section class="wrap" style="padding-top: 0;">
+      <a class="btn" href="projects.html">&larr; all projects</a>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="titleblock">
+      <div class="tb tb--name">
+        <span class="tb__k">Name</span>
+        <span class="tb__v">Jacob Kim</span>
+        <span class="tb__sub">Calgary &middot; Waterloo</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Discipline</span>
+        <span class="tb__v">Mechatronics Eng.</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Institution</span>
+        <span class="tb__v">University of Waterloo</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Contact</span>
+        <span class="tb__v">
+          <a class="tlink" href="mailto:j925@uwaterloo.ca">email</a> &middot;
+          <a class="tlink" href="https://github.com/jjkim08">github</a> &middot;
+          <a class="tlink" href="https://linkedin.com/in/jacob-kim08">linkedin</a>
+        </span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Rev</span>
+        <span class="tb__v">2026.08</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Sheet</span>
+        <span class="tb__v">quadcopter &mdash; 03 / 06</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
