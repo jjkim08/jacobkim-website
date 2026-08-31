@@ -297,6 +297,27 @@ body.home .site:focus-within { transform: translateY(0); }
 .frame--tall { aspect-ratio: 4 / 5; }
 .frame--wide { aspect-ratio: 21 / 9; }
 
+/* flight-log video strip (vertical clips) */
+.fliprow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.7rem, 1.8vw, 1.3rem);
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+}
+.fliprow video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  display: block;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--ink);
+}
+@media (max-width: 620px) {
+  .fliprow { grid-template-columns: 1fr 1fr; }
+}
+
 /* keycap list (game controls) */
 .keys {
   display: flex;
