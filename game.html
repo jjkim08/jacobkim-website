@@ -6,28 +6,53 @@
   <script>document.documentElement.classList.add("js")</script>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111110'/%3E%3Cg fill='none' stroke='%23f5f3ec' stroke-width='2.4'%3E%3Ccircle cx='16' cy='16' r='7'/%3E%3Cpath d='M16 3v8M16 21v8M3 16h8M21 16h8'/%3E%3C/g%3E%3C/svg%3E" />
   <title>Bunblade &middot; Jacob Kim</title>
-  <meta name="description" content="Bunblade: a turn-based roguelike built in Unity. Play a bunny, parry a monster's attacks in real time, and spend your winnings in the shop between battles." />
+  <meta name="description" content="Bunblade: a turn-based combat system built in Unity 6 and C#, with an event-driven architecture, a custom heap-based turn scheduler, and a coroutine-driven parry layered on the turn loop." />
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/motion.css" />
   <script src="js/site.js" defer></script>
 </head>
-<body>
+<body class="wide">
 
   <header class="site">
     <nav class="nav">
       <a href="index.html">about me</a>
       <a href="projects.html">projects</a>
+      <a href="fun.html">fun</a>
     </nav>
   </header>
 
   <main>
     <section class="wrap">
-      <p class="kicker" data-reveal="fade">Project 02 &middot; Unity &middot; C#</p>
+      <p class="kicker" data-reveal="fade">Project 02 &middot; Unity 6 &middot; C#</p>
       <h1 class="t-hero vt-game" data-lines data-reveal-now>Bunblade</h1>
       <p class="lede" data-reveal="rise" style="margin-top: 1.5rem;">
-        A turn-based combat game with a twist: a real-time parry sits inside the turn
-        system. Time the input window and you cancel the hit.
+        A turn-based combat system built in Unity 6 and C#, designed around an
+        event-driven architecture: one turn state machine broadcasts events and
+        every system subscribes on its own, so combat, status effects, spells,
+        the shop, and run progression stay fully decoupled.
       </p>
+      <table class="spec" data-reveal="rise" style="margin-top: 2rem; max-width: 62rem;">
+        <tr>
+          <th>Architecture</th>
+          <td>Systems wire together through <code>event Action</code> delegates and unsubscribe on turn end, so no system holds a hard reference to another.</td>
+        </tr>
+        <tr>
+          <th>Turn order</th>
+          <td>A hand-written generic binary heap acts as the scheduler: each actor's speed maps inversely to a time-to-next-turn value, and actors are re-queued after acting so slows and speed swings reorder the fight.</td>
+        </tr>
+        <tr>
+          <th>Parry</th>
+          <td>A coroutine state machine runs per incoming hit (windup, parry window, late threshold). The Space input is graded early, perfect, late, or fail, with a downtime lockout that punishes mashing.</td>
+        </tr>
+        <tr>
+          <th>Combat</th>
+          <td>Elemental weakness system, stacking burn / slow / attack-debuff statuses ticked each turn, and mana-gated spells authored as ScriptableObjects.</td>
+        </tr>
+        <tr>
+          <th>Run loop</th>
+          <td>A persistent session singleton carries gold and battle count across scenes and rescales each enemy on a fresh instance, so the roguelike run keeps ramping.</td>
+        </tr>
+      </table>
     </section>
 
     <section class="wrap" style="padding-top: 0;">

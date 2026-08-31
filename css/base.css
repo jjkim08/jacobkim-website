@@ -246,7 +246,7 @@ body.home .site:focus-within { transform: translateY(0); }
 .rowlink:hover, .rowlink:focus-visible { color: var(--paper); outline: none; }
 .rowlink__i { font-family: var(--font-mono); font-size: var(--step--1); padding-top: 0.6em; }
 .rowlink__t { font-family: var(--font-display); font-size: var(--step-2); line-height: 0.95; }
-.rowlink__meta { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); }
+.rowlink__meta { font-family: var(--font-mono); font-size: var(--step-0); color: var(--ink); font-weight: 700; }
 .rowlink:hover .rowlink__meta, .rowlink:focus-visible .rowlink__meta { color: var(--paper); }
 .rowlink__go { font-family: var(--font-display); font-size: var(--step-1); transition: transform 0.4s cubic-bezier(0.7, 0, 0.15, 1); }
 .rowlink:hover .rowlink__go, .rowlink:focus-visible .rowlink__go { transform: translateX(0.5rem); }
