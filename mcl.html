@@ -76,42 +76,76 @@ Localization</h1>
 
     <hr class="divider" />
 
+    <!-- ============ how it works ============ -->
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">How it works</p>
+      <h2 class="t-xl" data-lines>The loop</h2>
+      <p data-reveal="rise" style="margin-top: clamp(1.5rem, 4vw, 2.5rem); max-width: 62ch;">
+        One pass of the algorithm is four steps. It repeats until the cloud of guesses
+        settles on the robot's position.
+      </p>
+      <table class="spec" data-reveal="rise" style="margin-top: 1.4rem; max-width: 60rem;">
+        <tr><th>1 &middot; Scatter</th><td>Drop <code>N</code> particles at random poses across the field, each a guess for where the robot is.</td></tr>
+        <tr><th>2 &middot; Score</th><td>Work out what each particle's two sensors should read from its pose, compare to the real readings, and weight it with a Gaussian so near matches count for far more.</td></tr>
+        <tr><th>3 &middot; Resample</th><td>Draw a fresh set of particles in proportion to those weights. Good guesses get copied, bad ones drop out, and the cloud contracts toward the poses that fit.</td></tr>
+        <tr><th>4 &middot; Estimate</th><td>Average the survivors. The distance from that average to the true pose is the error for the trial.</td></tr>
+      </table>
+      <p data-reveal="rise" style="margin-top: 1.4rem; max-width: 62ch;">
+        More particles make the average steadier, but each one costs compute and the gain
+        shrinks as you pile them on. The question is where that trade-off lands.
+      </p>
+    </section>
+
+    <hr class="divider" />
+
     <!-- ============ the graphs ============ -->
     <section class="wrap">
       <p class="kicker" data-reveal="fade">The graphs</p>
       <h2 class="t-xl" data-lines>What the data shows</h2>
 
       <p data-reveal="rise" style="margin-top: 1rem; max-width: 62ch;">
-        1000 trials per particle count, swept from 50 to 1000, on each of the three
-        layouts. Averaging <code>N</code> noisy estimates shrinks the spread by a factor
-        of <code>&radic;N</code>, so the error should fall as:
-      </p>
-      <p class="formula" data-reveal="fade">E(N) = k / &radic;N + c</p>
-      <p data-reveal="rise" style="max-width: 62ch;">
-        where <code>c</code> is the floor it cannot beat. The full derivation is in the
-        paper; the graphs are the test.
+        For each layout I swept <code>N</code> from 50 to 1000 and ran 1000 randomised
+        trials at every step, recording the mean positional error. Plotted raw, against
+        particle count:
       </p>
 
       <figure class="chartfig" data-reveal="wipe">
         <img src="assets/mcl/fig-scatter.png" loading="lazy"
              alt="Scatter plot of mean localization error against particle count for the three layouts" />
-        <figcaption>Mean error (m) against particle count. Every layout drops fast, then flattens.</figcaption>
+        <figcaption>Mean error (m) against particle count. Every layout drops fast, then flattens out toward its own level.</figcaption>
       </figure>
+
+      <p data-reveal="rise" style="max-width: 62ch; margin-top: clamp(1.8rem, 4vw, 2.6rem);">
+        That shape is <code>1/&radic;N</code>: cutting the error in half takes about four
+        times the particles. It comes from averaging: pool <code>N</code> noisy estimates
+        and the spread tightens by a factor of <code>&radic;N</code>. So the model is
+      </p>
+      <p class="formula" data-reveal="fade">E(N) = k / &radic;N + c</p>
+      <p data-reveal="rise" style="max-width: 62ch;">
+        with <code>k</code> the rate of improvement and <code>c</code> a floor the
+        estimate cannot beat. If that is right, replotting against <code>1/&radic;N</code>
+        should straighten the data into lines. It does:
+      </p>
 
       <figure class="chartfig" data-reveal="wipe">
         <img src="assets/mcl/fig-regression.png" loading="lazy"
              alt="The same data plotted against one over root N, with fitted regression lines" />
         <figcaption>
-          The same data against <code>1/&radic;N</code>. The fits: slope <code>k</code>
-          &asymp; 2.2 for all three, intercept <code>c</code> = 0.158, 0.465 and
-          0.125&nbsp;m, with R&sup2; between 0.95 and 0.99.
+          Linear fits against <code>1/&radic;N</code>: slope <code>k</code> &asymp; 2.2
+          for all three layouts, intercept <code>c</code> = 0.158, 0.465 and 0.125&nbsp;m,
+          with R&sup2; between 0.95 and 0.99.
         </figcaption>
       </figure>
+
+      <p data-reveal="rise" style="max-width: 62ch; margin-top: clamp(1.8rem, 4vw, 2.6rem);">
+        Reading <code>k</code> and <code>c</code> off those lines and putting them back
+        into the model draws the curve each layout is actually on:
+      </p>
 
       <figure class="chartfig" data-reveal="wipe">
         <img src="assets/mcl/fig-curve.png" loading="lazy"
              alt="The fitted inverse square root curves of error against particle count" />
-        <figcaption>The fitted curves. Each extra particle buys less until the error settles on the floor <code>c</code>.</figcaption>
+        <figcaption>The fitted curves. Past a few hundred particles the line is nearly flat: more compute, almost no accuracy.</figcaption>
       </figure>
 
       <div class="flow" data-reveal="rise" style="margin-top: clamp(1.8rem, 4vw, 2.8rem); max-width: 62ch;">
@@ -125,7 +159,8 @@ Localization</h1>
         </p>
         <p>
           On this field, somewhere around 400 to 750 particles captured almost all of the
-          accuracy that was on the table.
+          accuracy that was on the table. The weighting math, the variance argument, and
+          the full per-environment analysis are in the paper below.
         </p>
       </div>
     </section>
