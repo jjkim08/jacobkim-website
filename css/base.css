@@ -325,27 +325,35 @@ body.home .site:focus-within { transform: translateY(0); }
   max-width: 34ch;
 }
 
-/* VEX robots: landscape video + portrait photo, matched heights */
+/* VEX robots: big landscape video, then the robot photo below */
 .robots {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: flex-start;
-  gap: clamp(1rem, 3vw, 1.8rem);
+  gap: clamp(1.4rem, 3.5vw, 2.4rem);
   margin-top: clamp(1.5rem, 4vw, 2.5rem);
 }
-.robots figure { margin: 0; display: flex; flex-direction: column; gap: 0.6rem; max-width: 100%; }
-.robots video,
+.robots figure { margin: 0; width: 100%; display: flex; flex-direction: column; gap: 0.7rem; align-items: flex-start; }
+.robots video {
+  width: min(100%, 62rem);
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center 40%;
+  display: block;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--ink);
+}
 .robots img,
 .robots__ph {
   display: block;
-  height: clamp(230px, 40vw, 360px);
+  height: clamp(260px, 40vw, 400px);
   width: auto;
   max-width: 100%;
   border: 2px solid var(--line);
   border-radius: var(--radius);
   background: var(--ink);
 }
-.robots video { aspect-ratio: 4 / 3; object-fit: cover; }
 .robots__ph {
   aspect-ratio: 3 / 4;
   display: grid;
@@ -357,7 +365,20 @@ body.home .site:focus-within { transform: translateY(0); }
   color: var(--ash);
   background: repeating-linear-gradient(45deg, transparent 0 11px, var(--hair) 11px 12px);
 }
-.robots figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 42ch; }
+.robots figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 44ch; }
+
+/* fun page: scratch embed + build photo */
+.scratch {
+  width: 100%;
+  max-width: 485px;
+  aspect-ratio: 485 / 402;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--ink);
+}
+.scratch iframe { width: 100%; height: 100%; border: 0; display: block; }
+.funshot { width: 100%; border: 2px solid var(--line); border-radius: var(--radius); display: block; }
 
 /* build-photo gallery: 2 rows of 4 */
 .gallery {

@@ -6,7 +6,7 @@
   <script>document.documentElement.classList.add("js")</script>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111110'/%3E%3Cg fill='none' stroke='%23f5f3ec' stroke-width='2.4'%3E%3Ccircle cx='16' cy='16' r='7'/%3E%3Cpath d='M16 3v8M16 21v8M3 16h8M21 16h8'/%3E%3C/g%3E%3C/svg%3E" />
   <title>Fun &middot; Jacob Kim</title>
-  <meta name="description" content="Smaller experiments, mods, and side projects by Jacob Kim." />
+  <meta name="description" content="Older games and side projects by Jacob Kim: a grade-7 VR game, a grade-5 Scratch game, and a PC build." />
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/motion.css" />
   <script src="js/site.js" defer></script>
@@ -25,37 +25,62 @@
       <p class="kicker" data-reveal="fade">Off the clock</p>
       <h1 class="t-xl" data-lines data-reveal-now>Fun</h1>
       <p class="lede" data-reveal="rise" style="margin-top: 1.5rem;">
-        Smaller stuff: game mods, quick builds, things that didn&rsquo;t need a whole
-        project page.
+        Older stuff: games I made as a kid, and a PC I put together.
       </p>
     </section>
 
-    <section class="wrap" style="padding-top: 0;">
-      <div class="rows" data-stagger>
-        <div class="rowlink" style="cursor: default;">
-          <span class="rowlink__i">01</span>
-          <span>
-            <span class="rowlink__t">Game mods</span><br />
-            <span class="rowlink__meta"><span class="draft">which games? link anything public</span></span>
-          </span>
-          <span></span>
+    <hr class="divider" />
+
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">01 &middot; grade 7</p>
+      <h2 class="t-lg" data-reveal="rise">Minecraft: Kill the Creepers</h2>
+      <div class="flow" data-reveal="rise" style="margin-top: 1rem;">
+        <p>
+          A browser VR game I built in grade 7 with A-Frame. Shoot the menu creeper to
+          start, then take out the creepers with arrows before they reach your base. Best
+          in a headset, but mouse-look and click works fine.
+        </p>
+        <p>
+          <a class="btn" href="vrgame/" target="_blank" rel="noopener">Play it &rarr;</a>
+        </p>
+        <p class="mono ash">Opens full screen in a new tab. Sound was removed so it runs anywhere.</p>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">02 &middot; grade 5</p>
+      <h2 class="t-lg" data-reveal="rise">Brawl Stars, in Scratch</h2>
+      <div class="flow" data-reveal="rise" style="margin-top: 1rem;">
+        <p>A little Scratch game based on the mobile game Brawl Stars. One of the first things I made.</p>
+        <div class="scratch" data-reveal="wipe">
+          <iframe src="https://scratch.mit.edu/projects/319900071/embed"
+                  title="Brawl Stars Scratch game" allowtransparency="true"
+                  allowfullscreen scrolling="no" loading="lazy"></iframe>
         </div>
-        <div class="rowlink" style="cursor: default;">
-          <span class="rowlink__i">02</span>
-          <span>
-            <span class="rowlink__t">PC builds</span><br />
-            <span class="rowlink__meta"><span class="draft">specs / photos if you want them here</span></span>
-          </span>
-          <span></span>
-        </div>
-        <div class="rowlink" style="cursor: default;">
-          <span class="rowlink__i">03</span>
-          <span>
-            <span class="rowlink__t">More soon</span><br />
-            <span class="rowlink__meta">this page fills in as you go</span>
-          </span>
-          <span></span>
-        </div>
+        <p class="mono ash">
+          <a class="tlink" href="https://scratch.mit.edu/projects/319900071/" target="_blank" rel="noopener">Open on Scratch &rarr;</a>
+        </p>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">03</p>
+      <h2 class="t-lg" data-reveal="rise">PC build</h2>
+      <div class="pair" style="margin-top: 1.5rem;">
+        <img class="funshot" src="assets/img/pc.jpg" alt="White Fractal Design PC build" data-reveal="wipe" loading="lazy" />
+        <table class="spec" data-reveal="rise">
+          <tr><th>CPU</th><td>Ryzen 5 5600X</td></tr>
+          <tr><th>Cooler</th><td>Noctua air</td></tr>
+          <tr><th>GPU</th><td>GeForce RTX 3060 Ti</td></tr>
+          <tr><th>Memory</th><td>32 GB DDR4</td></tr>
+          <tr><th>Storage</th><td>1 TB SSD</td></tr>
+          <tr><th>PSU</th><td>800 W</td></tr>
+          <tr><th>Case</th><td>Fractal Design</td></tr>
+        </table>
       </div>
     </section>
   </main>

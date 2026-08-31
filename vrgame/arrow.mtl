@@ -1,0 +1,24 @@
+Title:
+Minecraft 2.0
+
+
+Basic idea:
+You move around and look in the minecraft scene
+
+
+Elements in the project:
+steve, a pig, a house, a zombie and some blocks
+
+
+Events:
+clicking
+
+Logic:
+if you hit a zombie with an arrow you get 1 point
+if the zombie touches you then you die
+Misc:
+you can choose the difficulty
+
+MVP:
+you shoot and zombie dies and if you touch the zombie you die
+
