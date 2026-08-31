@@ -325,36 +325,40 @@ body.home .site:focus-within { transform: translateY(0); }
   max-width: 34ch;
 }
 
-/* VEX robots: big landscape video, then the robot photo below */
-.robots {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: clamp(1.4rem, 3.5vw, 2.4rem);
-  margin-top: clamp(1.5rem, 4vw, 2.5rem);
-}
-.robots figure { margin: 0; width: 100%; display: flex; flex-direction: column; gap: 0.7rem; align-items: flex-start; }
+/* VEX robots: the driver-skills clip (portrait phone footage, shown as-is) */
+.robots { margin-top: clamp(1.5rem, 4vw, 2.5rem); }
+.robots figure { margin: 0; display: flex; flex-direction: column; gap: 0.7rem; align-items: flex-start; }
 .robots video {
-  width: min(100%, 62rem);
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  object-position: center 40%;
-  display: block;
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--ink);
-}
-.robots img,
-.robots__ph {
-  display: block;
-  height: clamp(260px, 40vw, 400px);
+  height: clamp(340px, 60vh, 600px);
   width: auto;
   max-width: 100%;
+  display: block;
   border: 2px solid var(--line);
   border-radius: var(--radius);
   background: var(--ink);
 }
-.robots__ph {
+.robots figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 44ch; }
+
+/* VEX: provincial win + 2025 robot, side by side and height-matched */
+.robopair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: flex-start;
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+}
+.robopair figure { margin: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+.robopair img,
+.robopair__ph {
+  height: clamp(260px, 34vw, 420px);
+  width: auto;
+  max-width: 100%;
+  display: block;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--ink);
+}
+.robopair__ph {
   aspect-ratio: 3 / 4;
   display: grid;
   place-items: center;
@@ -365,14 +369,9 @@ body.home .site:focus-within { transform: translateY(0); }
   color: var(--ash);
   background: repeating-linear-gradient(45deg, transparent 0 11px, var(--hair) 11px 12px);
 }
-.robots figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 44ch; }
+.robopair figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 38ch; }
 
-/* VEX provincial-win photo */
-.winshot { margin: clamp(1.5rem, 4vw, 2.5rem) 0 0; display: flex; flex-direction: column; gap: 0.7rem; align-items: flex-start; }
-.winshot img { width: min(100%, 62rem); display: block; border: 2px solid var(--line); border-radius: var(--radius); background: var(--ink); }
-.winshot figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 52ch; }
-
-/* MCL page: formula callout, figure cards, embedded PDF */
+/* MCL page: formula callout + figure cards */
 .formula {
   font-family: var(--font-code);
   font-size: var(--step-0);
@@ -400,18 +399,6 @@ body.home .site:focus-within { transform: translateY(0); }
   max-width: 60ch;
   margin-top: 0.7rem;
 }
-
-.pdf {
-  width: 100%;
-  max-width: 62rem;
-  height: min(85vh, 900px);
-  margin-top: clamp(1.2rem, 3vw, 2rem);
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--ink);
-}
-.pdf object, .pdf iframe { width: 100%; height: 100%; border: 0; display: block; }
 
 /* fun page: scratch embed + build photo */
 .scratch {
