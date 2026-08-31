@@ -372,7 +372,7 @@ body.home .site:focus-within { transform: translateY(0); }
 .winshot img { width: min(100%, 62rem); display: block; border: 2px solid var(--line); border-radius: var(--radius); background: var(--ink); }
 .winshot figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 52ch; }
 
-/* MCL page: formula callouts, data table, embedded PDF */
+/* MCL page: formula callout, figure cards, embedded PDF */
 .formula {
   font-family: var(--font-code);
   font-size: var(--step-0);
@@ -382,12 +382,24 @@ body.home .site:focus-within { transform: translateY(0); }
   border-left: 3px solid var(--line);
   overflow-x: auto;
 }
-.tablewrap { overflow-x: auto; margin-top: clamp(1.2rem, 3vw, 2rem); }
-.dtable { width: 100%; border-collapse: collapse; font-family: var(--font-code); font-size: var(--step--1); }
-.dtable th, .dtable td { padding: 0.6rem 1.1rem; border-bottom: 1px solid var(--hair); text-align: right; white-space: nowrap; }
-.dtable th:first-child, .dtable td:first-child { text-align: left; }
-.dtable thead th { border-bottom: 2px solid var(--line); color: var(--ash); text-transform: uppercase; letter-spacing: 0.04em; }
-.dtable tbody tr:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.chartfig { margin: clamp(1.4rem, 3.5vw, 2.4rem) 0 0; }
+.chartfig img {
+  display: block;
+  width: 100%;
+  max-width: 52rem;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(0.5rem, 1.5vw, 1rem);
+}
+.chartfig--dark img { background: var(--ink); }
+.chartfig figcaption {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--ash);
+  max-width: 60ch;
+  margin-top: 0.7rem;
+}
 
 .pdf {
   width: 100%;

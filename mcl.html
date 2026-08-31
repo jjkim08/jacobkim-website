@@ -37,7 +37,7 @@ Localization</h1>
       <div class="stats" data-stagger style="margin-top: clamp(2rem, 5vw, 3.5rem);">
         <div class="stat"><b>k/&radic;N + c</b><span>the error model</span></div>
         <div class="stat"><b>3</b><span>field layouts tested</span></div>
-        <div class="stat"><b>1000</b><span>trials per data point</span></div>
+        <div class="stat"><b>R&sup2; 0.95+</b><span>regression fit</span></div>
         <div class="stat"><b>0.13&nbsp;m</b><span>best-case error floor</span></div>
       </div>
     </section>
@@ -76,88 +76,75 @@ Localization</h1>
 
     <hr class="divider" />
 
-    <!-- ============ the math ============ -->
+    <!-- ============ the graphs ============ -->
     <section class="wrap">
-      <p class="kicker" data-reveal="fade">The math</p>
-      <h2 class="t-xl" data-lines>Why the error goes as 1&nbsp;/&nbsp;&radic;N</h2>
+      <p class="kicker" data-reveal="fade">The graphs</p>
+      <h2 class="t-xl" data-lines>What the data shows</h2>
 
-      <div class="flow" data-reveal="rise" style="margin-top: clamp(1.5rem, 4vw, 2.5rem); max-width: 64ch;">
+      <p data-reveal="rise" style="margin-top: 1rem; max-width: 62ch;">
+        1000 trials per particle count, swept from 50 to 1000, on each of the three
+        layouts. Averaging <code>N</code> noisy estimates shrinks the spread by a factor
+        of <code>&radic;N</code>, so the error should fall as:
+      </p>
+      <p class="formula" data-reveal="fade">E(N) = k / &radic;N + c</p>
+      <p data-reveal="rise" style="max-width: 62ch;">
+        where <code>c</code> is the floor it cannot beat. The full derivation is in the
+        paper; the graphs are the test.
+      </p>
+
+      <figure class="chartfig" data-reveal="wipe">
+        <img src="assets/mcl/fig-scatter.png" loading="lazy"
+             alt="Scatter plot of mean localization error against particle count for the three layouts" />
+        <figcaption>Mean error (m) against particle count. Every layout drops fast, then flattens.</figcaption>
+      </figure>
+
+      <figure class="chartfig" data-reveal="wipe">
+        <img src="assets/mcl/fig-regression.png" loading="lazy"
+             alt="The same data plotted against one over root N, with fitted regression lines" />
+        <figcaption>
+          The same data against <code>1/&radic;N</code>. The fits: slope <code>k</code>
+          &asymp; 2.2 for all three, intercept <code>c</code> = 0.158, 0.465 and
+          0.125&nbsp;m, with R&sup2; between 0.95 and 0.99.
+        </figcaption>
+      </figure>
+
+      <figure class="chartfig" data-reveal="wipe">
+        <img src="assets/mcl/fig-curve.png" loading="lazy"
+             alt="The fitted inverse square root curves of error against particle count" />
+        <figcaption>The fitted curves. Each extra particle buys less until the error settles on the floor <code>c</code>.</figcaption>
+      </figure>
+
+      <div class="flow" data-reveal="rise" style="margin-top: clamp(1.8rem, 4vw, 2.8rem); max-width: 62ch;">
         <p>
-          Each particle is scored by how far its predicted sensor reading sits from the
-          real one, squared to punish large misses:
+          <code>k</code> barely moves between layouts, so the rate particles buy down
+          error is the same everywhere. <code>c</code>, the floor, is what the
+          environment sets: the center pillar is worst at 0.465&nbsp;m because it acts as
+          extra walls and creates more poses that read identically, and the four corner
+          boxes are best at 0.125&nbsp;m because they break up the walls that ambiguous
+          particles spread along.
         </p>
-        <p class="formula">e<sub>i</sub> = (d<sub>front</sub> tested &minus; actual)&sup2; + (d<sub>right</sub> tested &minus; actual)&sup2;</p>
         <p>
-          That error is pushed through a Gaussian so weight falls off smoothly with
-          distance, then all weights are normalised to sum to one:
-        </p>
-        <p class="formula">w<sub>i</sub> = e<sup>&minus;e<sub>i</sub>&thinsp;/&thinsp;2&sigma;&sup2;</sup>&nbsp;&nbsp;&rarr;&nbsp;&nbsp;w<sub>i</sub>' = w<sub>i</sub> / &Sigma; w<sub>j</sub></p>
-        <p>
-          The particles are resampled in proportion to <code>w<sub>i</sub>'</code> so good
-          ones get copied and bad ones drop out, and the estimate is the average of what
-          survives. The error for a trial is the distance from that average to the true
-          position.
-        </p>
-        <p>
-          The estimate is a mean of <code>N</code> samples, so its variance is
-          <code>&sigma;&sup2;/N</code> and its spread is <code>&sigma;/&radic;N</code>.
-          That spread is exactly what the error measures, so the error has to follow:
-        </p>
-        <p class="formula">E(N) = k / &radic;N + c</p>
-        <p>
-          <code>k</code> sets how fast the error falls; <code>c</code> is the floor it
-          cannot beat. Substituting <code>x = 1/&radic;N</code> makes this a straight
-          line, so linear regression on the trial data recovers <code>k</code> and
-          <code>c</code>. The fit came back with a strong Pearson correlation, so the
-          inverse&ndash;square&ndash;root model holds.
+          On this field, somewhere around 400 to 750 particles captured almost all of the
+          accuracy that was on the table.
         </p>
       </div>
     </section>
 
     <hr class="divider" />
 
-    <!-- ============ results ============ -->
+    <!-- ============ the tool ============ -->
     <section class="wrap">
-      <p class="kicker" data-reveal="fade">Results</p>
-      <h2 class="t-xl" data-lines>Mean error vs particle count</h2>
-
-      <div class="tablewrap" data-reveal="wipe">
-        <table class="dtable">
-          <thead>
-            <tr><th>N</th><th>No obstacles</th><th>Center pillar</th><th>4 corners</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>50</td><td>0.4749</td><td>0.7787</td><td>0.4354</td></tr>
-            <tr><td>100</td><td>0.3783</td><td>0.6702</td><td>0.3317</td></tr>
-            <tr><td>150</td><td>0.3255</td><td>0.6352</td><td>0.2941</td></tr>
-            <tr><td>200</td><td>0.3048</td><td>0.6335</td><td>0.2895</td></tr>
-            <tr><td>300</td><td>0.2828</td><td>0.6087</td><td>0.2592</td></tr>
-            <tr><td>400</td><td>0.2573</td><td>0.5819</td><td>0.2336</td></tr>
-            <tr><td>500</td><td>0.2660</td><td>0.5892</td><td>0.2183</td></tr>
-            <tr><td>750</td><td>0.2487</td><td>0.5219</td><td>0.1879</td></tr>
-            <tr><td>1000</td><td>0.2293</td><td>0.5200</td><td>0.2041</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="mono ash" style="margin-top: 0.9rem;">Mean localization error in metres, averaged over 1000 randomised trials.</p>
-
-      <div class="flow" data-reveal="rise" style="margin-top: clamp(1.8rem, 4vw, 2.8rem); max-width: 64ch;">
-        <p>
-          Across all three layouts <code>k</code> came out roughly the same: the rate at
-          which particles buy down error does not care about the environment. What
-          changes is <code>c</code>, the floor.
-        </p>
-        <table class="spec">
-          <tr><th>No obstacles</th><td>Floor near 0.158&nbsp;m. Even a plain square has poses where both sensors read the same wall.</td></tr>
-          <tr><th>Center pillar</th><td>Floor near 0.465&nbsp;m, the worst. The pillar acts as a second set of walls, so more positions give identical readings and the estimate collapses toward the middle.</td></tr>
-          <tr><th>4 corners</th><td>Floor near 0.125&nbsp;m, the best. The boxes break up the long walls the ambiguous particles spread along, and are too small for both sensors to catch at once.</td></tr>
-        </table>
-        <p>
-          So past a few hundred particles the fight is no longer against randomness, it
-          is against the geometry of the room. On this field roughly 400 to 750
-          particles captured almost all of the accuracy that was available.
-        </p>
-      </div>
+      <p class="kicker" data-reveal="fade">The tool</p>
+      <h2 class="t-xl" data-lines>Watching it fail</h2>
+      <figure class="chartfig chartfig--dark" data-reveal="wipe" style="margin-top: clamp(1.5rem, 4vw, 2.5rem);">
+        <img src="assets/mcl/fig-sim.png" loading="lazy"
+             alt="Pygame visualiser showing particle clusters spread across several non-matching positions" />
+        <figcaption>
+          The Pygame visualiser. Here the sensors read 0.98&nbsp;m front and 1.28&nbsp;m
+          right, but three separate clusters fit that reading, so the average lands in
+          dead space and the estimate is wrong. That gap is what the floor is made of.
+        </figcaption>
+      </figure>
     </section>
 
     <hr class="divider" />
@@ -167,8 +154,8 @@ Localization</h1>
       <p class="kicker" data-reveal="fade">The write-up</p>
       <h2 class="t-xl" data-lines>Full paper</h2>
       <p data-reveal="rise" style="margin-top: 1rem; max-width: 60ch;">
-        The complete investigation, with the derivations, the regression, and the
-        per-environment analysis in full.
+        The complete investigation: the weighting and resampling math, the derivation,
+        the regression, and the per-environment analysis in full.
       </p>
 
       <div class="pdf" data-reveal="wipe">
