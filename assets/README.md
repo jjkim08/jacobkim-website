@@ -12,7 +12,9 @@ img/
 
 drones/
   v1/  v2/  v3/  v4/  v5/
-      model.glb         full-assembly export from Fusion 360 (or .stl / .obj)
+      model.glb         full-assembly export from Fusion 360. Drop it in and the
+                        frame becomes an interactive 3D viewer automatically
+                        (send .stl / .obj instead and I'll convert to .glb).
       *.jpg             work-in-progress photos for that version
   flight.mp4            flight footage, muted loop (or send raw clips)
 

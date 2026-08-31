@@ -1,0 +1,14 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+.idea/
+
+# local tooling
+node_modules/
+*.log
+
+# Claude Code — keep launch.json, ignore personal/local settings
+.claude/settings.local.json
+.claude/*.local.json

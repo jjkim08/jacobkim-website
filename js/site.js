@@ -52,6 +52,7 @@
         const p = travel > 0 ? clamp01(-intro.getBoundingClientRect().top / travel) : 0;
         intro.style.setProperty("--dock", remap(p, 0.05, 0.4).toFixed(4));
         intro.style.setProperty("--panel", remap(p, 0.32, 0.62).toFixed(4));
+        intro.style.setProperty("--cue", (1 - remap(p, 0.0, 0.1)).toFixed(4));
       }
     : () => {};
   applyIntro();
@@ -80,6 +81,53 @@
       a.setAttribute("aria-current", "page");
     }
   });
+
+  /* ---- drone models: swap a [data-model] frame for an interactive
+     <model-viewer> once the .glb actually exists in assets/. Until then
+     the frame keeps its "drop a file here" placeholder. ---- */
+  const modelFrames = document.querySelectorAll("[data-model]");
+  if (modelFrames.length) {
+    let libRequested = false;
+    const loadLib = () => {
+      if (libRequested) return;
+      libRequested = true;
+      const s = document.createElement("script");
+      s.type = "module";
+      s.src = "js/vendor/model-viewer.min.js";
+      document.head.appendChild(s);
+    };
+    modelFrames.forEach((frame) => {
+      const src = frame.getAttribute("data-model");
+      if (!src) return;
+      fetch(src, { method: "HEAD" })
+        .then((r) => {
+          if (!r.ok) return;
+          loadLib();
+          const label = (frame.textContent.trim().split("\n")[0] || "3D model").trim();
+          const mv = document.createElement("model-viewer");
+          const attrs = {
+            src,
+            alt: label,
+            "camera-controls": "",
+            "auto-rotate": "",
+            "auto-rotate-delay": "0",
+            "rotation-per-second": "22deg",
+            "camera-orbit": "-25deg 68deg 82%",
+            "interaction-prompt": "none",
+            "touch-action": "pan-y",
+            "tone-mapping": "agx",
+            exposure: "0.6",
+            "shadow-intensity": "2",
+            "shadow-softness": "0.4",
+          };
+          for (const [k, v] of Object.entries(attrs)) mv.setAttribute(k, v);
+          frame.textContent = "";
+          frame.classList.add("frame--model");
+          frame.appendChild(mv);
+        })
+        .catch(() => {});
+    });
+  }
 
   /* ---- drone version rail: highlight the section in view ---- */
   const rail = document.querySelector("[data-rail]");
