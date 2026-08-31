@@ -71,11 +71,12 @@
         // },
       };
 
-      // --- jacobkim.ca embed: keep the render target at the authored
-      // 960x600 and let CSS scale the *display* to fill the iframe.
-      // Without this, scenes with fixed-pixel UI (the battle screen)
-      // render at the browser size and the HUD ends up off-canvas. ---
-      config.matchWebGLToCanvasSize = false;
+      // By default, Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
 
       // If you would like all file writes inside Unity Application.persistentDataPath
       // directory to automatically persist so that the contents are remembered when
@@ -102,10 +103,9 @@
 
 
       } else {
-        // jacobkim.ca embed: fill the iframe; CSS + matchWebGLToCanvasSize
-        // above keep the internal resolution locked to 960x600.
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
