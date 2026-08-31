@@ -367,6 +367,11 @@ body.home .site:focus-within { transform: translateY(0); }
 }
 .robots figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 44ch; }
 
+/* VEX provincial-win photo */
+.winshot { margin: clamp(1.5rem, 4vw, 2.5rem) 0 0; display: flex; flex-direction: column; gap: 0.7rem; align-items: flex-start; }
+.winshot img { width: min(100%, 62rem); display: block; border: 2px solid var(--line); border-radius: var(--radius); background: var(--ink); }
+.winshot figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 52ch; }
+
 /* fun page: scratch embed + build photo */
 .scratch {
   width: 100%;
