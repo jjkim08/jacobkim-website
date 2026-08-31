@@ -35,31 +35,34 @@ Search the HTML for `class="draft"` to find every spot that needs your input.
 
 ---
 
-## 1. The game — DONE
+## 1. The game
 
 The Bunblade WebGL build lives in `assets/game/` (`Build/`, `TemplateData/`,
-`index.html`). `game.html` embeds it in the `#game-embed` box via an `<iframe>` to
-`assets/game/index.html`; `TemplateData/style.css` has an override block that makes
-the canvas fill the frame and hides the Unity footer.
+`index.html`). `game.html` embeds it in `#game-embed` via an `<iframe>` to
+`assets/game/index.html`.
 
-`index.html` sets `config.matchWebGLToCanvasSize = false` so the game always
-renders at its authored **960 x 600** and CSS just scales the display up. Do not
-remove that — without it, scenes with fixed-pixel UI (the battle screen) render at
-the browser's size and the HUD ends up off-screen with a blue camera-void border.
+**Drop the raw Unity build in — no editing.** `js/site.js` reaches into the
+same-origin iframe on load and injects CSS that stretches the canvas to fill the
+frame and hides the Unity footer. `css/base.css` sets `.game-embed` to
+`aspect-ratio: 16 / 9` (the game's authored aspect). The old approach of
+hand-editing the build's `index.html` / `TemplateData/style.css` after every
+rebuild is gone.
 
-The build is Brotli-compressed with **Decompression Fallback: ON**, so the files
-are named `game.*.unityweb` (~14 MB total) and the loader decompresses them in JS.
-That means **it works on any plain static host, including GitHub Pages** — no
-`Content-Encoding` header needed. Verified locally against `serve.py`.
+Rebuild flow:
+1. Build WebGL in Unity (Decompression Fallback is ON in Player Settings).
+2. Copy the output's `Build/`, `TemplateData/`, `index.html` into `assets/game/`,
+   overwriting. Don't touch them.
+3. Commit + push.
 
-`serve.py`'s `.br` / `Content-Encoding` handling is now unused (kept in case a
-future build goes back to raw `.br`).
+The build is Brotli + **Decompression Fallback**, so files are `game.*.unityweb`
+(~14 MB) and the loader decompresses in JS — **works on GitHub Pages**, no
+`Content-Encoding` needed. `serve.py`'s `.br` handling is now unused (harmless).
 
-If you re-build the game, the fresh `assets/game/index.html` and
-`TemplateData/style.css` will overwrite the two custom bits — re-apply:
-`config.matchWebGLToCanvasSize = false;` (index.html), the desktop-branch
-`canvas.style.width/height = "100%"` (index.html), and the "jacobkim.ca embed
-overrides" block at the bottom of `TemplateData/style.css`.
+**Aspect ratio:** the HUD canvases in the battle scene are Screen Space - Camera,
+so they fit any viewport. If the game ever letterboxes / clips in the frame again,
+either the game's aspect changed (update `.game-embed`'s `aspect-ratio` in
+`css/base.css`) or a canvas got switched to World Space (World Space UI does NOT
+auto-fit — keep the HUD on Screen Space - Camera / Overlay).
 
 Note: `assets/game/Build/*.unityweb` are ~14 MB of binaries committed directly
 (Git LFS is not an option — GitHub Pages serves LFS pointer files, not the data).

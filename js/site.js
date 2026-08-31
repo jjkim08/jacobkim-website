@@ -129,6 +129,31 @@
     });
   }
 
+  /* ---- game embed: make the raw Unity WebGL output fill the iframe
+     and drop its footer, so the build can be dropped in unedited.
+     Same-origin, so we can restyle the iframe's document. ---- */
+  const gameFrame = document.querySelector("#game-embed iframe");
+  if (gameFrame) {
+    const styleGame = () => {
+      try {
+        const doc = gameFrame.contentDocument;
+        if (!doc || doc.getElementById("jk-embed-style")) return;
+        const s = doc.createElement("style");
+        s.id = "jk-embed-style";
+        s.textContent =
+          "html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#231f20}" +
+          "#unity-container{position:absolute;inset:0;width:100%;height:100%;transform:none}" +
+          "#unity-canvas{width:100%!important;height:100%!important;display:block}" +
+          "#unity-footer{display:none!important}";
+        (doc.head || doc.documentElement).appendChild(s);
+      } catch (e) {
+        /* cross-origin — not expected on the same host */
+      }
+    };
+    gameFrame.addEventListener("load", styleGame);
+    styleGame();
+  }
+
   /* ---- drone version rail: highlight the section in view ---- */
   const rail = document.querySelector("[data-rail]");
   if (rail) {
