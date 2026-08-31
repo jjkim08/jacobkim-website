@@ -38,6 +38,7 @@
 .vt-drone { view-transition-name: hero-drone; }
 .vt-game  { view-transition-name: hero-game; }
 .vt-vex   { view-transition-name: hero-vex; }
+.vt-mcl   { view-transition-name: hero-mcl; }
 
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),

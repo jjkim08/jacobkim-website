@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.classList.add("js")</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111110'/%3E%3Cg fill='none' stroke='%23f5f3ec' stroke-width='2.4'%3E%3Ccircle cx='16' cy='16' r='7'/%3E%3Cpath d='M16 3v8M16 21v8M3 16h8M21 16h8'/%3E%3C/g%3E%3C/svg%3E" />
+  <title>Monte Carlo Localization &middot; Jacob Kim</title>
+  <meta name="description" content="A math investigation into Monte Carlo Localization: modelling how particle count relates to positional error, and finding the optimal number of particles across three simulated VEX-field environments." />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/motion.css" />
+  <script src="js/site.js" defer></script>
+</head>
+<body class="wide">
+
+  <header class="site">
+    <nav class="nav">
+      <a href="index.html">about me</a>
+      <a href="projects.html">projects</a>
+      <a href="fun.html">fun</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============ hero ============ -->
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">Project 04 &middot; Math investigation &middot; C++</p>
+      <h1 class="t-hero vt-mcl" data-lines data-reveal-now>Monte Carlo
+Localization</h1>
+      <p class="lede" data-reveal="rise" style="margin-top: 1.5rem;">
+        A particle filter estimates where a robot is by scattering guesses, scoring each
+        against the sensors, and resampling toward the good ones. This paper asks a
+        narrower question: how does the count of guesses trade off against the error
+        that is left, and where does adding more stop being worth it.
+      </p>
+
+      <div class="stats" data-stagger style="margin-top: clamp(2rem, 5vw, 3.5rem);">
+        <div class="stat"><b>k/&radic;N + c</b><span>the error model</span></div>
+        <div class="stat"><b>3</b><span>field layouts tested</span></div>
+        <div class="stat"><b>1000</b><span>trials per data point</span></div>
+        <div class="stat"><b>0.13&nbsp;m</b><span>best-case error floor</span></div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="pair">
+        <div class="flow" data-reveal="rise">
+          <h2 class="t-lg">The question</h2>
+          <p>
+            On a VEX field the robot starts an autonomous routine not fully certain where
+            it is, and that uncertainty compounds through the run. Monte Carlo
+            Localization handles it with a cloud of <code>N</code> particles, each a
+            hypothesis for the pose <code>(x, y, &theta;)</code>. More particles cover the
+            space better but cost compute, so somewhere there is an optimal <code>N</code>.
+          </p>
+          <p>
+            I modelled the relationship between <code>N</code> and the mean positional
+            error, and then tested how that relationship shifts as the field gets more
+            cluttered.
+          </p>
+        </div>
+        <div class="flow" data-reveal="rise">
+          <h2 class="t-lg">Setup</h2>
+          <table class="spec">
+            <tr><th>Field</th><td>3.65&nbsp;m square, VEX perimeter</td></tr>
+            <tr><th>Robot</th><td>0.457&nbsp;m square, max legal size</td></tr>
+            <tr><th>Sensors</th><td>2 optical range (front + right), IMU for heading</td></tr>
+            <tr><th>Particle init</th><td>Uniform over the field; heading Gaussian about &theta; (&sigma; = 8&deg;)</td></tr>
+            <tr><th>Estimate</th><td>Mean of the resampled particles</td></tr>
+            <tr><th>Trials</th><td>1000 per <code>N</code>, static (no motion model)</td></tr>
+            <tr><th>Runner</th><td>C++ batch sweep; Python + Pygame visualiser</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ============ the math ============ -->
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">The math</p>
+      <h2 class="t-xl" data-lines>Why the error goes as 1&nbsp;/&nbsp;&radic;N</h2>
+
+      <div class="flow" data-reveal="rise" style="margin-top: clamp(1.5rem, 4vw, 2.5rem); max-width: 64ch;">
+        <p>
+          Each particle is scored by how far its predicted sensor reading sits from the
+          real one, squared to punish large misses:
+        </p>
+        <p class="formula">e<sub>i</sub> = (d<sub>front</sub> tested &minus; actual)&sup2; + (d<sub>right</sub> tested &minus; actual)&sup2;</p>
+        <p>
+          That error is pushed through a Gaussian so weight falls off smoothly with
+          distance, then all weights are normalised to sum to one:
+        </p>
+        <p class="formula">w<sub>i</sub> = e<sup>&minus;e<sub>i</sub>&thinsp;/&thinsp;2&sigma;&sup2;</sup>&nbsp;&nbsp;&rarr;&nbsp;&nbsp;w<sub>i</sub>' = w<sub>i</sub> / &Sigma; w<sub>j</sub></p>
+        <p>
+          The particles are resampled in proportion to <code>w<sub>i</sub>'</code> so good
+          ones get copied and bad ones drop out, and the estimate is the average of what
+          survives. The error for a trial is the distance from that average to the true
+          position.
+        </p>
+        <p>
+          The estimate is a mean of <code>N</code> samples, so its variance is
+          <code>&sigma;&sup2;/N</code> and its spread is <code>&sigma;/&radic;N</code>.
+          That spread is exactly what the error measures, so the error has to follow:
+        </p>
+        <p class="formula">E(N) = k / &radic;N + c</p>
+        <p>
+          <code>k</code> sets how fast the error falls; <code>c</code> is the floor it
+          cannot beat. Substituting <code>x = 1/&radic;N</code> makes this a straight
+          line, so linear regression on the trial data recovers <code>k</code> and
+          <code>c</code>. The fit came back with a strong Pearson correlation, so the
+          inverse&ndash;square&ndash;root model holds.
+        </p>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ============ results ============ -->
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">Results</p>
+      <h2 class="t-xl" data-lines>Mean error vs particle count</h2>
+
+      <div class="tablewrap" data-reveal="wipe">
+        <table class="dtable">
+          <thead>
+            <tr><th>N</th><th>No obstacles</th><th>Center pillar</th><th>4 corners</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>50</td><td>0.4749</td><td>0.7787</td><td>0.4354</td></tr>
+            <tr><td>100</td><td>0.3783</td><td>0.6702</td><td>0.3317</td></tr>
+            <tr><td>150</td><td>0.3255</td><td>0.6352</td><td>0.2941</td></tr>
+            <tr><td>200</td><td>0.3048</td><td>0.6335</td><td>0.2895</td></tr>
+            <tr><td>300</td><td>0.2828</td><td>0.6087</td><td>0.2592</td></tr>
+            <tr><td>400</td><td>0.2573</td><td>0.5819</td><td>0.2336</td></tr>
+            <tr><td>500</td><td>0.2660</td><td>0.5892</td><td>0.2183</td></tr>
+            <tr><td>750</td><td>0.2487</td><td>0.5219</td><td>0.1879</td></tr>
+            <tr><td>1000</td><td>0.2293</td><td>0.5200</td><td>0.2041</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mono ash" style="margin-top: 0.9rem;">Mean localization error in metres, averaged over 1000 randomised trials.</p>
+
+      <div class="flow" data-reveal="rise" style="margin-top: clamp(1.8rem, 4vw, 2.8rem); max-width: 64ch;">
+        <p>
+          Across all three layouts <code>k</code> came out roughly the same: the rate at
+          which particles buy down error does not care about the environment. What
+          changes is <code>c</code>, the floor.
+        </p>
+        <table class="spec">
+          <tr><th>No obstacles</th><td>Floor near 0.158&nbsp;m. Even a plain square has poses where both sensors read the same wall.</td></tr>
+          <tr><th>Center pillar</th><td>Floor near 0.465&nbsp;m, the worst. The pillar acts as a second set of walls, so more positions give identical readings and the estimate collapses toward the middle.</td></tr>
+          <tr><th>4 corners</th><td>Floor near 0.125&nbsp;m, the best. The boxes break up the long walls the ambiguous particles spread along, and are too small for both sensors to catch at once.</td></tr>
+        </table>
+        <p>
+          So past a few hundred particles the fight is no longer against randomness, it
+          is against the geometry of the room. On this field roughly 400 to 750
+          particles captured almost all of the accuracy that was available.
+        </p>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ============ the paper ============ -->
+    <section class="wrap">
+      <p class="kicker" data-reveal="fade">The write-up</p>
+      <h2 class="t-xl" data-lines>Full paper</h2>
+      <p data-reveal="rise" style="margin-top: 1rem; max-width: 60ch;">
+        The complete investigation, with the derivations, the regression, and the
+        per-environment analysis in full.
+      </p>
+
+      <div class="pdf" data-reveal="wipe">
+        <object data="assets/mcl/monte-carlo-localization.pdf#view=FitH" type="application/pdf">
+          <iframe src="assets/mcl/monte-carlo-localization.pdf#view=FitH" title="Monte Carlo Localization paper"></iframe>
+        </object>
+      </div>
+
+      <p style="margin-top: 1.2rem;">
+        <a class="btn" href="assets/mcl/monte-carlo-localization.pdf" target="_blank" rel="noopener">Open the PDF &nearr;</a>
+      </p>
+      <p class="mono ash" style="margin-top: 1rem;">
+        Code:
+        <a class="tlink" href="https://github.com/jjkim08/monte-carlo-simulator" target="_blank" rel="noopener">github.com/jjkim08/monte-carlo-simulator</a>
+        &ndash; C++ experiment runner plus a Pygame visualiser you can drive around the field.
+      </p>
+    </section>
+
+    <section class="wrap" style="padding-top: 0;">
+      <a class="btn" href="projects.html">&larr; all projects</a>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="titleblock">
+      <div class="tb tb--name">
+        <span class="tb__k">Name</span>
+        <span class="tb__v">Jacob Kim</span>
+        <span class="tb__sub">Calgary &middot; Waterloo</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Discipline</span>
+        <span class="tb__v">Mechatronics Eng.</span>
+      </div>
+      <div class="tb">
+        <span class="tb__k">Institution</span>
+        <span class="tb__v">University of Waterloo</span>
+      </div>
+      <div class="tb tb--contact">
+        <span class="tb__k">Contact</span>
+        <span class="tb__v">
+          <a class="tlink" href="mailto:j925kim@uwaterloo.ca">email</a> &middot;
+          <a class="tlink" href="https://github.com/jjkim08">github</a> &middot;
+          <a class="tlink" href="https://linkedin.com/in/jacob-kim08">linkedin</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
