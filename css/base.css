@@ -372,7 +372,7 @@ body.home .site:focus-within { transform: translateY(0); }
   color: var(--ash);
   background: repeating-linear-gradient(45deg, transparent 0 11px, var(--hair) 11px 12px);
 }
-.robopair figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); max-width: 38ch; }
+.robopair figcaption { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ash); }
 @media (max-width: 620px) { .robopair { grid-template-columns: 1fr; } }
 
 /* MCL page: formula callout + figure cards */
