@@ -254,6 +254,28 @@ body.home .site:focus-within { transform: translateY(0); }
 .rowlink__go { font-family: var(--font-display); font-size: var(--step-1); transition: transform 0.4s cubic-bezier(0.7, 0, 0.15, 1); }
 .rowlink:hover .rowlink__go, .rowlink:focus-visible .rowlink__go { transform: translateX(0.5rem); }
 
+/* ---- keyword chips (mirror the projects.html row keywords on each project page) ---- */
+.kw {
+  list-style: none;
+  padding: 0;
+  margin: clamp(1.1rem, 2.5vw, 1.6rem) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.kw li {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--ash);
+  border: 1px solid var(--hair);
+  border-radius: var(--radius-sm);
+  padding: 0.3em 0.75em;
+}
+:is(.invert, .slab) .kw li {
+  color: color-mix(in srgb, var(--paper) 62%, var(--ink));
+  border-color: color-mix(in srgb, var(--paper) 26%, transparent);
+}
+
 /* ---- spec table ---- */
 .spec { border-collapse: collapse; width: 100%; font-family: var(--font-mono); font-size: var(--step--1); }
 .spec th, .spec td { text-align: left; padding: 0.65rem 1.2rem 0.65rem 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
