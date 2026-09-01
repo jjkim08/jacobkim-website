@@ -328,10 +328,9 @@ body.home .site:focus-within { transform: translateY(0); }
   max-width: 34ch;
 }
 
-/* VEX robots: Jacob's original phone clip, shown as a plain video at its own
-   aspect ratio (it is portrait). Just capped to a sane width + the site border. */
+/* VEX robots: the driver-skills clip, a plain 1920x1080 video at its own aspect. */
 .robots { margin-top: clamp(1.5rem, 4vw, 2.5rem); }
-.robots figure { margin: 0; width: 100%; max-width: 26rem; display: flex; flex-direction: column; gap: 0.7rem; }
+.robots figure { margin: 0; width: 100%; max-width: 52rem; display: flex; flex-direction: column; gap: 0.7rem; }
 .robots video {
   width: 100%;
   height: auto;
