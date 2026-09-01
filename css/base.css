@@ -328,12 +328,15 @@ body.home .site:focus-within { transform: translateY(0); }
   max-width: 34ch;
 }
 
-/* VEX robots: the driver-skills clip (16:9 landscape file) */
+/* VEX robots: the clip is a portrait phone video; the frame around it is a
+   landscape 16:9 crop (object-fit on the video, matching landscape poster). */
 .robots { margin-top: clamp(1.5rem, 4vw, 2.5rem); }
 .robots figure { margin: 0; width: 100%; max-width: 52rem; display: flex; flex-direction: column; gap: 0.7rem; }
 .robots video {
   width: 100%;
   aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center 40%;
   display: block;
   border: 2px solid var(--line);
   border-radius: var(--radius);
