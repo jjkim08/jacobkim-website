@@ -39,6 +39,7 @@
 .vt-game  { view-transition-name: hero-game; }
 .vt-vex   { view-transition-name: hero-vex; }
 .vt-mcl   { view-transition-name: hero-mcl; }
+.vt-hand  { view-transition-name: hero-hand; }
 
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),

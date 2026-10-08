@@ -149,11 +149,19 @@ body.home.nav-shown .site,
 body.home .site:focus-within { transform: translateY(0); }
 @media (prefers-reduced-motion: reduce) { .site { transition-duration: 0.15s; } }
 
-.nav { display: flex; justify-content: center; gap: 0.4rem; padding: 0.9rem 1rem; }
+/* Keep navigation at the same scale when wide pages enlarge the root type. */
+.nav {
+  --nav-rem: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: calc(var(--nav-rem) * 0.4);
+  padding: calc(var(--nav-rem) * 0.9) var(--nav-rem);
+}
+body.wide .nav { --nav-rem: calc(1rem - 5px); }
 .nav a {
   font-family: var(--font-display);
-  font-size: var(--step-0);
-  padding: 0.5rem 1.6rem;
+  font-size: clamp(calc(var(--nav-rem) * 1.18), calc(var(--nav-rem) * 1.1 + 0.34vw), calc(var(--nav-rem) * 1.4));
+  padding: calc(var(--nav-rem) * 0.5) calc(var(--nav-rem) * 1.6);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   text-decoration: none;
@@ -178,10 +186,12 @@ body.home .site:focus-within { transform: translateY(0); }
 .workgrid {
   display: grid;
   gap: clamp(0.9rem, 2vw, 1.6rem);
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   margin-top: clamp(1.5rem, 4vw, 2.5rem);
 }
-.workcard { display: grid; gap: 1rem; text-decoration: none; align-content: start; }
+.workcard { display: grid; grid-column: span 2; gap: 1rem; text-decoration: none; align-content: start; }
+.workcard:nth-child(4) { grid-column: 2 / span 2; }
+.workcard:nth-child(5) { grid-column: 4 / span 2; }
 .workcard__frame {
   aspect-ratio: 1 / 1;
   border: 2px solid var(--line);
@@ -215,7 +225,8 @@ body.home .site:focus-within { transform: translateY(0); }
 .workcard:hover .workcard__go, .workcard:focus-visible .workcard__go { transform: translateX(0.45rem); }
 
 @media (max-width: 1040px) {
-  .workgrid { grid-template-columns: repeat(2, 1fr); }
+  .workgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .workgrid > .workcard { grid-column: auto; }
 }
 @media (max-width: 560px) {
   .workgrid { grid-template-columns: 1fr; max-width: 28rem; }
