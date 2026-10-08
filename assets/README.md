@@ -38,6 +38,7 @@ Add these files to enable the new project media:
 
 - `img/work-hand.jpg`: photo or CAD render for the home-page hand card.
 - `hand/model.glb`: robotic hand model for the hand project page.
+- `hand/demo.mp4`: movement demonstration video beneath the hand model.
 - `bathroom-lock/model.glb`: lock model for the first section of Fun.
 
 The existing viewer supports GLB/glTF, with drag-to-rotate, zoom, and automatic
